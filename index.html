@@ -3,149 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TODO Lista</title>
+    <title>TODO List</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
-            background-color: #f5f5f5;
-            color: #4a148c;
-            padding: 20px;
-        }
-    
-        h1 {
-            color: #6a1b9a;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-    
-        form {
-            margin-bottom: 30px;
-        }
-    
-        input, select, button {
-            padding: 12px;
-            margin: 5px;
-            border-radius: 8px;
-            border: none;
-            font-size: 1rem;
-        }
-    
-        input, select {
-            background: white;
-            color: #4a148c;
-            width: 200px;
-        }
-    
-        button {
-            background: #6a1b9a;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-    
-        button:hover {
-            background: #9c27b0;
-        }
-    
-        .zad-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 30px;
-            max-width: 1000px;
-            margin: auto;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-    
-        section.task-column {
-            flex: 1;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            min-width: 250px;
-            max-width: 320px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-    
-        section.task-column:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-    
-        section.task-column h2 {
-            color: #6a1b9a;
-            border-bottom: 2px solid #6a1b9a;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-        }
-    
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-    
-        li {
-            background: #ede7f6;
-            margin: 10px 0;
-            padding: 12px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: background 0.25s ease;
-        }
-    
-        li:hover {
-            background: #d1c4e9;
-        }
-    
-        .delete-btn {
-            background: #e91e63;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-    
-        .delete-btn:hover {
-            background: #c2185b;
-        }
-    </style>
-    </head>
-    <body>
-        <h1>TODO Lista</h1>
-        <form id="TODO-form">
-            <input type="text" id="tytul-zad" placeholder="Wpisz zadanie" required>
-            <select id="typ-zadania">
+</head>
+<body>
+    <header>
+        <h1>TODO List</h1>
+    </header>
+    <main class="container">
+        <form id="taskForm" aria-label="Formularz dodawania zadania">
+            <label for="taskTitle">Tytuł zadania:</label>
+            <input type="text" id="taskTitle" placeholder="Tytuł zadania" required>
+            
+            <label for="taskDescription">Opis zadania:</label>
+            <textarea id="taskDescription" placeholder="Opis zadania" rows="2" style="width: 200px;"></textarea>
+            
+            <label for="taskCategory">Kategoria:</label>
+            <select id="taskCategory" required>
                 <option value="Praca">Praca</option>
                 <option value="Dom">Dom</option>
                 <option value="Inne">Inne</option>
             </select>
-            <button type="submit">Dodaj</button>
+            
+            <label for="taskStatus">Status:</label>
+            <select id="taskStatus" required>
+                <option value="do zrobienia">Do zrobienia</option>
+                <option value="w trakcie">W trakcie</option>
+                <option value="zrobione">Zrobione</option>
+            </select>
+            
+            <label for="taskPriority">Priorytet:</label>
+            <select id="taskPriority" required>
+                <option value="niski">Niski</option>
+                <option value="średni">Średni</option>
+                <option value="wysoki">Wysoki</option>
+            </select>
+            
+            <label for="taskDueDate">Planowana data zakończenia:</label>
+            <input type="date" id="taskDueDate">
+            
+            <button type="submit">Dodaj zadanie</button>
         </form>
         
         <div class="zad-container">
             <section class="task-column">
                 <h2>Praca</h2>
-                <ul id="lista-praca"></ul>
+                <ul id="lista-praca" role="list"></ul>
             </section>
             <section class="task-column">
                 <h2>Dom</h2>
-                <ul id="lista-dom"></ul>
+                <ul id="lista-dom" role="list"></ul>
             </section>
             <section class="task-column">
                 <h2>Inne</h2>
-                <ul id="lista-inne"></ul>
+                <ul id="lista-inne" role="list"></ul>
             </section>
         </div>
-    
-        <script src="script.js"></script>
-    </body>
-    </html>
-    
+        
+        <!-- edycja -->
+        <div id="editTaskContainer" style="display: none;">
+            <h2>Edytuj zadanie</h2>
+            <form id="editTaskForm">
+                <input type="hidden" id="editTaskId">
+                <label for="editTaskTitle">Tytuł zadania:</label>
+                <input type="text" id="editTaskTitle" required>
+                
+                <label for="editTaskDescription">Opis zadania:</label>
+                <textarea id="editTaskDescription" rows="2" style="width: 200px;" required></textarea>
+                
+                <label for="editTaskCategory">Kategoria:</label>
+                <select id="editTaskCategory" required>
+                    <option value="Praca">Praca</option>
+                    <option value="Dom">Dom</option>
+                    <option value="Inne">Inne</option>
+                </select>
+                
+                <label for="editTaskStatus">Status:</label>
+                <select id="editTaskStatus" required>
+                    <option value="do zrobienia">Do zrobienia</option>
+                    <option value="w trakcie">W trakcie</option>
+                    <option value="zrobione">Zrobione</option>
+                </select>
+                
+                <label for="editTaskPriority">Priorytet:</label>
+                <select id="editTaskPriority" required>
+                    <option value="niski">Niski</option>
+                    <option value="średni">Średni</option>
+                    <option value="wysoki">Wysoki</option>
+                </select>
+                
+                <label for="editTaskDueDate">Planowana data zakończenia:</label>
+                <input type="date" id="editTaskDueDate">
+                
+                <button type="submit">Zapisz zmiany</button>
+                <button type="button" id="cancelEditButton">Anuluj</button>
+            </form>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
